@@ -6,7 +6,10 @@ import schedule
 
 class Whatsappbot: 
     def __init__(self):
-        self.mensagem = "Tô almoçando, mo. Quando terminar de almoçar eu te respondo e escuto seu áudio direitinho. Te amo!"
+        #Mensagem que será enviada
+        self.mensagem = "E aí, amor, como tá? To acabando meu treino aqui agora. Umas 8h já estou em casa."
+        
+        #Nome do contato que será buscado
         self.contatos = ["Vida"]
         options = webdriver.ChromeOptions()
         options.add_argument('lang=pt-br')
@@ -18,9 +21,11 @@ class Whatsappbot:
         time.sleep(30)
 
     def enviarMensagens(self):
-        #<span dir="auto" title="Vida" class="x1iyjqo2 x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft x1rg5ohu _ao3e" style="min-height: 0px;">Vida</span>
-        #<div aria-activedescendant="" aria-autocomplete="list" -label="Digite uma mensagem"
-        #<span aria-hidden="true" data-icon="send" class="">
+        
+        #Comentários abaixo são marcações HTML (via DevTools) usadas para identificar os elementos corretos
+        # (Localizar Contato) <span dir="auto" title="Vida" class="x1iyjqo2 x6ikm8r x10wlt62 x1n2onr6 xlyipyv xuxw1ft x1rg5ohu _ao3e" style="min-height: 0px;">Vida</span>
+        # (Campo de Digitação da Mensagem) <div aria-activedescendant="" aria-autocomplete="list" -label="Digite uma mensagem"
+        # (Botão de Envio) <span aria-hidden="true" data-icon="send" class="">
 
         for contato in self.contatos:
             contato_element = self.driver.find_element(By.XPATH, f"//span[@title='{contato}']")
@@ -42,8 +47,10 @@ class Whatsappbot:
 
 bot = Whatsappbot()
 
-schedule.every().day.at("13:10").do(bot.enviarMensagens)
+#Agenda o horário de envio da mensagem
+schedule.every().day.at("07:40").do(bot.enviarMensagens)    
 
+#Loop contínuo que verifica se está na hora de enviar a mensagem
 while True:
     schedule.run_pending()
     time.sleep(1)        
